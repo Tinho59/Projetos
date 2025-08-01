@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Média Final - Formulário Estilizado</title>
+<style>
+  body {
+    background-color: #0a0f25;
+    color: #b0d6ff;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  h1 {
+    color: #3ea1ff;
+    text-align: center;
+  }
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #07122b;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 0 20px #1a3bb8;
+  }
+  .category {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-top: 20px;
+    border-bottom: 2px solid #3ea1ff;
+    padding-bottom: 5px;
+  }
+  table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: #121a43;
+    box-shadow: 0 0 10px #1a3bb8;
+  }
+  th, td {
+    padding: 12px 15px;
+    border: 1px solid #3ea1ff;
+    text-align: center;
+  }
+  th {
+    background-color: #003a75;
+  }
+  .aprovado {
+    color: #7ef77e !important;
+    font-weight: bold;
+  }
+  .reprovado {
+    color: #f75e5e !important;
+    font-weight: bold;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  label {
+    font-weight: bold;
+    font-size: 1em;
+  }
+  input[type="text"],
+  input[type="number"] {
+    padding: 10px;
+    border: 1.5px solid #3ea1ff;
+    border-radius: 6px;
+    background-color: #0a152e;
+    color: #b0d6ff;
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  input[type="text"]:focus,
+  input[type="number"]:focus {
+    border-color: #66b3ff;
+  }
+  button {
+    background-color: #3ea1ff;
+    color: #0a0f25;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #3ea1ff;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #66b3ff;
+  }
+  #resultado {
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Média Final</h1>
+  
+  <form id="formDados">
+    <div class="category">Informe seus dados</div>
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required placeholder="Digite seu nome" />
+    
+    <label for="idade">Idade:</label>
+    <input type="number" id="idade" name="idade" required min="1" placeholder="Digite sua idade" />
+    
+    <label for="nota">Nota da prova (0 a 10):</label>
+    <input type="number" id="nota" name="nota" required min="0" max="10" step="0.01" placeholder="Digite sua nota" />
+    
+    <label for="trabalhos">Nota dos trabalhos (0 a 10):</label>
+    <input type="number" id="trabalhos" name="trabalhos" required min="0" max="10" step="0.01" placeholder="Digite a nota dos trabalhos" />
+    
+    <label for="apresentacao">Nota da apresentação (0 a 10):</label>
+    <input type="number" id="apresentacao" name="apresentacao" required min="0" max="10" step="0.01" placeholder="Digite a nota da apresentação" />
+    
+    <label for="relatorios">Nota dos relatórios (0 a 10):</label>
+    <input type="number" id="relatorios" name="relatorios" required min="0" max="10" step="0.01" placeholder="Digite a nota dos relatórios" />
+    
+    <button type="submit">Calcular Média Final</button>
+  </form>
+
+  <div id="resultado">
+    <p>Preencha o formulário e clique em Calcular Média Final.</p>
+  </div>
+</div>
+
+<script>
+  const resultadoDiv = document.getElementById("resultado");
+
+  // Calcula média final (média simples)
+  function calcularMediaFinal(nota, trabalhos, apresentacao, relatorios) {
+    return (nota + trabalhos + apresentacao + relatorios) / 4;
+  }
+
+  // Calcula soma das notas
+  function calcularSoma(nota, trabalhos, apresentacao, relatorios) {
+    return nota + trabalhos + apresentacao + relatorios;
+  }
+
+  // Verifica aprovação pelo valor da soma (exemplo: aprovado se soma >= 24)
+  function verificarAprovacao(soma) {
+    return soma >= 24; // pois 6*4 = 24
+  }
+
+  function gerarTabela({ nome, idade, nota, trabalhos, apresentacao, relatorios }) {
+    const soma = calcularSoma(nota, trabalhos, apresentacao, relatorios);
+    const mediaFinal = calcularMediaFinal(nota, trabalhos, apresentacao, relatorios);
+    const aprovado = verificarAprovacao(soma);
+
+    resultadoDiv.innerHTML = `
+      <div class="category">Dados do Aluno</div>
+      <table>
+        <tr><th>Nome</th><td>${nome}</td></tr>
+        <tr><th>Idade</th><td>${idade}</td></tr>
+      </table>
+
+      <div class="category">Notas</div>
+      <table>
+        <tr><th>Prova</th><td>${nota.toFixed(2)}</td></tr>
+        <tr><th>Trabalhos</th><td>${trabalhos.toFixed(2)}</td></tr>
+        <tr><th>Apresentação</th><td>${apresentacao.toFixed(2)}</td></tr>
+        <tr><th>Relatórios</th><td>${relatorios.toFixed(2)}</td></tr>
+        <tr><th>Soma das Notas</th><td>${soma.toFixed(2)}</td></tr>
+        <tr><th>Média Final</th><td>${mediaFinal.toFixed(2)}</td></tr>
+        <tr><th>Status</th><td class="${aprovado ? 'aprovado' : 'reprovado'}">${aprovado ? 'APROVADO' : 'REPROVADO'}</td></tr>
+      </table>
+    `;
+  }
+
+  document.getElementById("formDados").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const nome = this.nome.value.trim();
+    const idade = Number(this.idade.value);
+    const nota = Number(this.nota.value);
+    const trabalhos = Number(this.trabalhos.value);
+    const apresentacao = Number(this.apresentacao.value);
+    const relatorios = Number(this.relatorios.value);
+
+    if(!nome) {
+      alert("Por favor, digite seu nome.");
+      return;
+    }
+    if(isNaN(idade) || idade < 1) {
+      alert("Idade inválida.");
+      return;
+    }
+
+    // Validação das notas
+    const notas = { nota, trabalhos, apresentacao, relatorios };
+    for (const [key, value] of Object.entries(notas)) {
+      if(isNaN(value) || value < 0 || value > 10) {
+        alert(`Nota inválida para ${key}. Deve ser entre 0 e 10.`);
+        return;
+      }
+    }
+
+    gerarTabela({ nome, idade, nota, trabalhos, apresentacao, relatorios });
+  });
+</script>
+
+</body>
+</html>
